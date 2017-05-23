@@ -1,0 +1,50 @@
+{
+    "name": "makehappen/autominifier",
+    "type": "library",
+    "description": "Automatically Minify and Concatenate your JS and CSS files and libraries into single files for improved application performance.",
+    "keywords": [
+        "makehappen",
+        "autominifier",
+        "minify",
+        "concatenate",
+        "gulp",
+        "grunt"
+    ],
+    "homepage": "https://github.com/makehappen/minifier",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Florin Ilie",
+            "email": "florin@after5.io",
+            "homepage": "https://after5.io",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php" : "~5.5|~7.0",
+        "matthiasmullie/minify": "^1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit" : "~4.0||~5.0",
+        "scrutinizer/ocular": "~1.1",
+        "squizlabs/php_codesniffer": "~2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "makehappen\\Minifier\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "makehappen\\Minifier\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
