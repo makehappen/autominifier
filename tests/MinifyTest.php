@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class MinifyTest extends TestCase
 {
-
     public function testFilesCanBeCreated()
     {
         require_once __DIR__ . '/../src/Minify.php';
@@ -16,9 +15,6 @@ final class MinifyTest extends TestCase
 
         // Instantiate auto minifier
         $objAutoMinifier = (new Minify())->setDev()->setTest();
-
-        // test storage
-        mkdir('build/storage');
 
         // test both file types
         foreach (['js', 'css'] as $strType) {
@@ -48,14 +44,11 @@ final class MinifyTest extends TestCase
 
             // clean up test files
             unlink($objAutoMinifier->getPublicFolder() .  $arrFileDetails[0]);
-            unlink($objAutoMinifier->getStorageFolder() .  '/autominifier-cache-bust.txt');
+            unlink($objAutoMinifier->getPublicFolder() . '/' . $strType .  '/autominifier-cache-bust.txt');
 
             // remove test directory
             rmdir("build/$strType");
         }
-
-        // remove test storage
-        rmdir('build/storage');
     }
 }
 

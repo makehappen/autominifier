@@ -11,13 +11,6 @@ use MatthiasMullie\Minify as Minifier;
 class Minify
 {
     /**
-     * Storage folder path
-     *
-     * @var string
-     */
-    protected $strStorageFolder;
-
-    /**
      * Cache bust file path
      *
      * @var string
@@ -94,14 +87,8 @@ class Minify
      */
     public function init()
     {
-        // set storage folder
-        $this->setStorageFolder();
-
         // set public folder location
         $this->setPublicFolder();
-
-        // cache bust file
-        $this->setCacheBustFile();
 
         // set file types we want minified
         $this->arrFileTypes = [
@@ -120,20 +107,7 @@ class Minify
      */
     public function setCacheBustFile($strFile = 'autominifier-cache-bust.txt')
     {
-        $this->strCacheBustFile = $this->strStorageFolder . "/$strFile";
-        return $this;
-    }
-
-    /**
-     * Set storage folder
-     *
-     * @param string $strFolder
-     * @return $this
-     */
-    public function setStorageFolder($strFolder = '/../../../../storage')
-    {
-        // set storage public path relative to package location
-        $this->strStorageFolder = __DIR__ . $strFolder;
+        $this->strCacheBustFile = $this->strPublicFolderPath . '/' . $this->getDestinationFolder() . "/$strFile";
         return $this;
     }
 
@@ -157,9 +131,6 @@ class Minify
      */
     public function setTest()
     {
-        // set storage folder
-        $this->setStorageFolder('/../build/storage');
-
         // set application public path relative to package location
         $this->setPublicFolder('/../build');
 
@@ -180,16 +151,6 @@ class Minify
     }
 
     /**
-     * Get storage folder
-     *
-     * @return string
-     */
-    public function getStorageFolder()
-    {
-        return $this->strStorageFolder;
-    }
-
-    /**
      * Build JS minified file
      *
      * @var $strFolder string
@@ -201,6 +162,8 @@ class Minify
         $this->setDestinationExtensionType('js');
         $this->setDestinationFolder($strFolder);
         $this->setDestinationFile($strFile);
+        $this->setCacheBustFile();
+
         return $strFolder . '/' . $strFile .'?' . $this->process();
     }
 
@@ -216,6 +179,7 @@ class Minify
         $this->setDestinationExtensionType('css');
         $this->setDestinationFolder($strFolder);
         $this->setDestinationFile($strFile);
+        $this->setCacheBustFile();
         return $strFolder . '/' . $strFile .'?' . $this->process();
     }
 
@@ -293,11 +257,6 @@ class Minify
      */
     public function saveCacheBust($strApplicationFileContents = '')
     {
-        // if we don't have a storage folder create it
-        if (!is_dir($this->getStorageFolder())) {
-            mkdir($this->getStorageFolder());
-        }
-
         // get contents signature
         $strNewCacheBust = md5($strApplicationFileContents);
 
