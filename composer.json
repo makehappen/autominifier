@@ -31,12 +31,12 @@
     },
     "autoload": {
         "psr-4": {
-            "makehappen\\Minifier\\": "src"
+            "makehappen\\autominifier\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "makehappen\\Minifier\\": "tests"
+            "makehappen\\autominifier\\": "tests"
         }
     },
     "scripts": {
