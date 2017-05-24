@@ -72,7 +72,7 @@ class Minify
     public function __construct()
     {
         // set class variables
-        $this->setClassVars();
+        $this->init();
     }
 
     /**
@@ -92,16 +92,16 @@ class Minify
      *
      * @return null
      */
-    public function setClassVars()
+    public function init()
     {
         // set storage folder
-        $this->strStorageFolder = __DIR__ . '/../../../../storage';
+        $this->setStorageFolder();
 
-        // set application public path relative to package location
-        $this->strPublicFolderPath = __DIR__ . '/../../../../public';
+        // set public folder location
+        $this->setPublicFolder();
 
         // cache bust file
-        $this->strCacheBustFile = $this->strStorageFolder . '/autominifier-cache-bust.txt';
+        $this->setCacheBustFile();
 
         // set file types we want minified
         $this->arrFileTypes = [
@@ -113,6 +113,44 @@ class Minify
     }
 
     /**
+     * Set Cache bust file
+     *
+     * @param string $strFile
+     * @return $this
+     */
+    public function setCacheBustFile($strFile = 'autominifier-cache-bust.txt')
+    {
+        $this->strCacheBustFile = $this->strStorageFolder . "/$strFile";
+        return $this;
+    }
+
+    /**
+     * Set storage folder
+     *
+     * @param string $strFolder
+     * @return $this
+     */
+    public function setStorageFolder($strFolder = '/../../../../storage')
+    {
+        // set storage public path relative to package location
+        $this->strStorageFolder = __DIR__ . $strFolder;
+        return $this;
+    }
+
+    /**
+     * Set public folder
+     *
+     * @param string $strFolder
+     * @return $this
+     */
+    public function setPublicFolder($strFolder = '/../../../../public')
+    {
+        // set application public path relative to package location
+        $this->strPublicFolderPath = __DIR__ . $strFolder;
+        return $this;
+    }
+
+    /**
      * Set test folder
      *
      * @return $this
@@ -120,13 +158,13 @@ class Minify
     public function setTest()
     {
         // set storage folder
-        $this->strStorageFolder = __DIR__ . '/../build/storage';
+        $this->setStorageFolder('/../build/storage');
 
         // set application public path relative to package location
-        $this->strPublicFolderPath = __DIR__ . '/../build';
+        $this->setPublicFolder('/../build');
 
         // cache bust file
-        $this->strCacheBustFile = $this->strStorageFolder . '/autominifier-cache-bust.txt';
+        $this->setCacheBustFile();
 
         return $this;
     }
@@ -207,20 +245,24 @@ class Minify
      * Set destination folder
      *
      * @param $strFolder
+     * @return $this
      */
     public function setDestinationFolder($strFolder)
     {
         $this->strDestinationFolder = $strFolder;
+        return $this;
     }
 
     /**
      * Set destination file
      *
      * @param $strFile
+     * @return $this
      */
     public function setDestinationFile($strFile)
     {
         $this->strDestinationFile = $strFile;
+        return $this;
     }
 
     /**
@@ -252,8 +294,8 @@ class Minify
     public function saveCacheBust($strApplicationFileContents = '')
     {
         // if we don't have a storage folder create it
-        if (!is_dir($this->strStorageFolder)) {
-            mkdir($this->strStorageFolder);
+        if (!is_dir($this->getStorageFolder())) {
+            mkdir($this->getStorageFolder());
         }
 
         // get contents signature
@@ -414,7 +456,7 @@ class Minify
             }
 
             // must not be the app file
-            if ($strFileName = $this->getDestinationFile()) {
+            if ($strFileName == $this->getDestinationFile()) {
                 continue;
             }
 
