@@ -3,6 +3,7 @@
 namespace Makehappen\AutoMinifier;
 
 use MatthiasMullie\Minify as Minifier;
+use Makehappen\AutoMinifier\Environment;
 
 /**
  * Class Minify
@@ -72,7 +73,6 @@ class Minify
         $this->init();
 
         // set environment
-        include_once 'Environment.php';
         $this->objEnvironment = new Environment();
     }
 
