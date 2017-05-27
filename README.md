@@ -35,11 +35,8 @@ Via Composer
 $ composer require makehappen/autominifier
 ```
 
-## Usage
+## Basic Usage
 
-Default settings:
- - folders: /js and /css
- - file names: app.min.js and app.min.css 
 ``` php
 // minifier instance with default settings
 $minifier = new Makehappen\AutoMinifier\Minify();
@@ -51,15 +48,16 @@ $minifier->js();
 $minifier->css();
 ```
 
-Custom settings
+## Customized Usage
 ``` php
 // minifier instance with public path relative to package src folder path
-$minifier = new Makehappen\AutoMinifier\Minify()->setPublicFolder('/../../../../public_html/');
+$minifier = new Makehappen\AutoMinifier\Minify();
+$minifier->setPublicFolder('/../../../../public_html/');
 
-// custom destinations for JS files and folder
+// returns .min.js file path with custom destinations
 $minifier->js('/javascript', 'functions.min.js');
 
-// custom destinations for CSS files and folder
+// returns .min.css file path path with custom destinations
 $minifier->js('/styles', 'style.min.css');
 
 ```
