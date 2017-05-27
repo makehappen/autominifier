@@ -101,17 +101,17 @@ If you discover any security related issues, please email florin@after5.io inste
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
 
-[ico-version]: https://img.shields.io/packagist/v/makehappen/minifier.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/makehappen/autominifier.svg?style=flat-square
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/makehappen/minifier/master.svg?style=flat-square
-[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/makehappen/minifier.svg?style=flat-square
-[ico-code-quality]: https://img.shields.io/scrutinizer/g/makehappen/minifier.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/makehappen/minifier.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/makehappen/autominifier/master.svg?style=flat-square
+[ico-scrutinizer]: https://img.shields.io/scrutinizer/coverage/g/makehappen/autominifier.svg?style=flat-square
+[ico-code-quality]: https://img.shields.io/scrutinizer/g/makehappen/autominifier.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/makehappen/autominifier.svg?style=flat-square
 
-[link-packagist]: https://packagist.org/packages/makehappen/minifier
-[link-travis]: https://travis-ci.org/makehappen/minifier
-[link-scrutinizer]: https://scrutinizer-ci.com/g/makehappen/minifier/code-structure
-[link-code-quality]: https://scrutinizer-ci.com/g/makehappen/minifier
-[link-downloads]: https://packagist.org/packages/makehappen/minifier
+[link-packagist]: https://packagist.org/packages/makehappen/autominifier
+[link-travis]: https://travis-ci.org/makehappen/autominifier
+[link-scrutinizer]: https://scrutinizer-ci.com/g/makehappen/autominifier/code-structure
+[link-code-quality]: https://scrutinizer-ci.com/g/makehappen/autominifier
+[link-downloads]: https://packagist.org/packages/makehappen/autominifier
 [link-author]: https://github.com/makehappen
 [link-contributors]: ../../contributors
