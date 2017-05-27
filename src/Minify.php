@@ -2,8 +2,6 @@
 
 namespace Makehappen\AutoMinifier;
 
-include_once 'Environment.php';
-
 use MatthiasMullie\Minify as Minifier;
 
 /**
@@ -12,6 +10,8 @@ use MatthiasMullie\Minify as Minifier;
  */
 class Minify
 {
+    protected $objEnvironment;
+
     /**
      * Cache bust file path
      *
@@ -72,7 +72,8 @@ class Minify
         $this->init();
 
         // set environment
-        $this->enviroment = new Environment();
+        include_once 'Environment.php';
+        $this->objEnvironment = new Environment();
     }
 
 
@@ -103,7 +104,7 @@ class Minify
      */
     public function setDev($bln = true)
     {
-        $this->enviroment->setDev($bln);
+        $this->objEnvironment->setDev($bln);
         $this->blnIsDev = $bln;
         return $this;
     }
@@ -208,7 +209,7 @@ class Minify
     public function process()
     {
         // return last cache bust in non development environments
-        if (!$this->enviroment->isDevEnv()) {
+        if (!$this->objEnvironment->isDevEnv()) {
             return $this->getCacheBust();
         }
 
