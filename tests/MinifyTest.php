@@ -11,7 +11,6 @@ final class MinifyTest extends TestCase
     public function testFilesCanBeCreated()
     {
         require_once __DIR__ . '/../src/Minify.php';
-        require_once __DIR__ . '/../src/Environment.php';
         require_once __DIR__ . '/../vendor/autoload.php';
 
         // Instantiate auto minifier
