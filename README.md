@@ -13,8 +13,7 @@ Automatically Minify and Concatenate your JS and CSS files and libraries into si
 ## Main features
  - Auto minify and concatenate js and css libraries into single .min files
  - Auto cache bust on changed versions
- - Auto correction of relative paths for css assets
- - Auto detection of development environments
+ - Auto detection of environment type
 
 ## Other features
  - It just works, out of the box
@@ -25,7 +24,7 @@ Automatically Minify and Concatenate your JS and CSS files and libraries into si
  - No "--production" flag required
  - No configuration updates needed when adding new files
  - Auto detect already minified files
- - Optional config allows for custom list and order of files
+ - Customize destination folder and file names
  - Faster than Gulp or Grunt
 
 ## Install
@@ -38,22 +37,31 @@ $ composer require makehappen/autominifier
 
 ## Usage
 
-JS
+Default settings:
+ - folders: /js and /css
+ - file names: app.min.js and app.min.css 
 ``` php
-<?= new Makehappen\AutoMinifier\Minify()->js(); ?>
-// will result in "/js/app.min.js" followed by a cache bust id
+// minifier instance with default settings
+$minifier = new Makehappen\AutoMinifier\Minify();
+
+// returns "/js/app.min.js?dh39skw83jdu38wodjr783jrysj38iee"
+$minifier->js();
+
+// returns "/css/app.min.css?dh39skw83jdu38wodjr783jrysj38iee"
+$minifier->css();
 ```
 
-CSS
+Custom settings
 ``` php
-<?= new Makehappen\AutoMinifier\Minify()->css(); ?>
-// will result in "/css/app.min.css" followed by a cache bust id
-```
+// minifier instance with public path relative to package src folder path
+$minifier = new Makehappen\AutoMinifier\Minify()->setPublicFolder('/../../../../public_html/');
 
-Custom folder and/or file name
-``` php
-<?= new Makehappen\AutoMinifier\Minify()->js('/javascript', 'my-app.min.js'); ?>
-// will result in "/javascript/my-app.min.js" followed by a cache bust id
+// custom destinations for JS files and folder
+$minifier->js('/javascript', 'functions.min.js');
+
+// custom destinations for CSS files and folder
+$minifier->js('/styles', 'style.min.css');
+
 ```
 
 ## Conventions
