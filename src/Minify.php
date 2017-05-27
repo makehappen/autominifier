@@ -2,8 +2,9 @@
 
 namespace Makehappen\AutoMinifier;
 
-use MatthiasMullie\Minify as Minifier;
 include_once 'Environment.php';
+
+use MatthiasMullie\Minify as Minifier;
 
 /**
  * Class Minify
