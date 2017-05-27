@@ -151,7 +151,7 @@ class Minify
     }
 
     /**
-     * Build JS minified file
+     * Build minified file
      *
      * @var $strFolder string
      * @var $strFile string
@@ -159,12 +159,7 @@ class Minify
      */
     public function js($strFolder = '/js', $strFile = 'app.min.js')
     {
-        $this->setDestinationExtensionType('js');
-        $this->setDestinationFolder($strFolder);
-        $this->setDestinationFile($strFile);
-        $this->setCacheBustFile();
-
-        return $strFolder . '/' . $strFile .'?' . $this->process();
+        return $this->getMinifiedFile($strType = 'js', $strFolder, $strFile);
     }
 
     /**
@@ -176,7 +171,20 @@ class Minify
      */
     public function css($strFolder = '/css', $strFile = 'app.min.css')
     {
-        $this->setDestinationExtensionType('css');
+        return $this->getMinifiedFile($strType = 'css', $strFolder, $strFile);
+    }
+    
+    /**
+     * Generate minified file
+     *
+     * @param string $strType
+     * @param string $strFolder
+     * @param string $strFile
+     * @return string
+     */
+    public function getMinifiedFile($strType = 'css', $strFolder = '/css', $strFile = 'app.min.css')
+    {
+        $this->setDestinationExtensionType($strType);
         $this->setDestinationFolder($strFolder);
         $this->setDestinationFile($strFile);
         $this->setCacheBustFile();
