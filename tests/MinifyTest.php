@@ -52,4 +52,3 @@ final class MinifyTest extends TestCase
         }
     }
 }
-
