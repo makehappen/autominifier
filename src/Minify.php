@@ -3,7 +3,6 @@
 namespace Makehappen\AutoMinifier;
 
 use MatthiasMullie\Minify as Minifier;
-use Makehappen\AutoMinifier\Environment;
 
 /**
  * Class Minify
@@ -97,70 +96,6 @@ class Minify
     }
 
     /**
-     * Set env to Dev
-     *
-     * @param bool $bln
-     * @return $this
-     */
-    public function setDev($bln = true)
-    {
-        $this->objEnvironment->setDev($bln);
-        $this->blnIsDev = $bln;
-        return $this;
-    }
-
-    /**
-     * Set Cache bust file
-     *
-     * @param string $strFile
-     * @return $this
-     */
-    public function setCacheBustFile($strFile = 'autominifier-cache-bust.txt')
-    {
-        $this->strCacheBustFile = $this->strPublicFolderPath . '/' . $this->getDestinationFolder() . "/$strFile";
-        return $this;
-    }
-
-    /**
-     * Set public folder
-     *
-     * @param string $strFolder
-     * @return $this
-     */
-    public function setPublicFolder($strFolder = '/../../../../public')
-    {
-        // set application public path relative to package location
-        $this->strPublicFolderPath = __DIR__ . $strFolder;
-        return $this;
-    }
-
-    /**
-     * Set test folder
-     *
-     * @return $this
-     */
-    public function setTest()
-    {
-        // set application public path relative to package location
-        $this->setPublicFolder('/../build');
-
-        // cache bust file
-        $this->setCacheBustFile();
-
-        return $this;
-    }
-
-    /**
-     * Get Public folder
-     *
-     * @return string
-     */
-    public function getPublicFolder()
-    {
-        return $this->strPublicFolderPath;
-    }
-
-    /**
      * Build minified file
      *
      * @var $strFolder string
@@ -214,57 +149,103 @@ class Minify
         }
 
         // build application file
-        $strApplicationFileContents = $this->build($this->arrFileTypes[$this->getDestinationExtension()]);
+        $strApplicationFileContents = $this->build();
 
-        // save application file contents
-        $strApplicationFileContents = $this->createApplicationFile($strApplicationFileContents);
+        // save application file
+        file_put_contents($this->getAppFileName(), $strApplicationFileContents);
 
         // save new cache bust
         return $this->saveCacheBust($strApplicationFileContents);
     }
 
     /**
-     * Set destination folder
+     * Build file
      *
-     * @param $strFolder
-     * @return $this
+     * @return string
      */
-    public function setDestinationFolder($strFolder)
+    public function build()
     {
-        $this->strDestinationFolder = $strFolder;
-        return $this;
+        // files folder
+        $strFilesFolder = $this->getFilesFolder();
+
+        // abort if folder not found
+        if (!is_dir($strFilesFolder)) {
+            return $strFilesFolder . ' folder not found';
+        }
+
+        // get all files
+        $arrFiles = scandir($strFilesFolder);
+
+        // loop through all files
+        $strMinifiedFileContents = '';
+        foreach ($arrFiles as $strFileName) {
+            // get minified content
+            $strFileContents = $this->getMinifiedContent($strFileName);
+
+            // don't include empty files
+            if (!$strFileContents) {
+                continue;
+            }
+
+            // add new minified file to concatenated version
+            $strMinifiedFileContents .= "\n/* $strFileName */\n" . $strFileContents;
+        }
+
+        // returned concatenated version of minifired files
+        return $strMinifiedFileContents;
     }
 
     /**
-     * Set destination file
+     * Get minified Content
      *
-     * @param $strFile
-     * @return $this
+     * @param $strFileName
+     * @return bool|string
      */
-    public function setDestinationFile($strFile)
+    public function getMinifiedContent($strFileName)
     {
-        $this->strDestinationFile = $strFile;
-        return $this;
+        // get file extension
+        $arrFileName = explode('.', $strFileName);
+        $strFileExtension = array_pop($arrFileName);
+
+        // must be a listed file type
+        if (!in_array($strFileExtension, $this->arrFileTypes[$this->getDestinationExtension()])) {
+            return '';
+        }
+
+        // must not be the app file
+        if ($strFileName == $this->getDestinationFile()) {
+            return '';
+        }
+
+        // build file path and name
+        $strFile = $this->getFilesFolder() . '/' . $strFileName;
+
+        // if it's minified already return content
+        if (preg_match('/\.min\./', $strFile)) {
+            return file_get_contents($strFile);
+        }
+
+        // return minified content
+        return $this->minifyContent($strFile);
     }
 
     /**
-     * Get destination folder
+     * Minify content
      *
-     * @return mixed
+     * @param  $strFile
+     * @return bool|string
      */
-    public function getDestinationFolder()
+    public function minifyContent($strFile)
     {
-        return $this->strDestinationFolder;
-    }
-
-    /**
-     * Set destination file
-     *
-     * @return mixed
-     */
-    public function getDestinationFile()
-    {
-        return $this->strDestinationFile;
+        // minify based on file type
+        switch ($this->getDestinationExtension()) {
+            case 'js':
+                return (new Minifier\JS($strFile))->minify();
+            case 'css':
+                return (new Minifier\CSS($strFile))->minify();
+            default:
+                return '';
+        }
     }
 
     /**
@@ -310,25 +291,81 @@ class Minify
     }
 
     /**
-     * Create minified and concatenated file
+     * Set env to Dev
      *
-     * @param $strApplicationFileContents
-     * @return string
+     * @param bool $bln
+     * @return $this
      */
-    public function createApplicationFile($strApplicationFileContents)
+    public function setDev($bln = true)
     {
-        file_put_contents($this->getAppFileName(), $strApplicationFileContents);
-        return $strApplicationFileContents;
+        $this->objEnvironment->setDev($bln);
+        $this->blnIsDev = $bln;
+        return $this;
     }
 
     /**
-     * Get application file name
+     * Set Cache bust file
      *
-     * @return string
+     * @param string $strFile
+     * @return $this
      */
-    public function getAppFileName()
+    public function setCacheBustFile($strFile = 'autominifier-cache-bust.txt')
     {
-        return $this->strPublicFolderPath . $this->getDestinationFolder() . '/' . $this->getDestinationFile();
+        $this->strCacheBustFile = $this->getFilesFolder() . "/$strFile";
+        return $this;
+    }
+
+    /**
+     * Set public folder
+     *
+     * @param string $strFolder
+     * @return $this
+     */
+    public function setPublicFolder($strFolder = '/../../../../public')
+    {
+        // set application public path relative to package location
+        $this->strPublicFolderPath = __DIR__ . $strFolder;
+        return $this;
+    }
+
+    /**
+     * Set test folder
+     *
+     * @return $this
+     */
+    public function setTest()
+    {
+        // set application public path relative to package location
+        $this->setPublicFolder('/../build');
+
+        // cache bust file
+        $this->setCacheBustFile();
+
+        return $this;
+    }
+
+    /**
+     * Set destination folder
+     *
+     * @param $strFolder
+     * @return $this
+     */
+    public function setDestinationFolder($strFolder)
+    {
+        $this->strDestinationFolder = $strFolder;
+        return $this;
+    }
+
+    /**
+     * Set destination file
+     *
+     * @param $strFile
+     * @return $this
+     */
+    public function setDestinationFile($strFile)
+    {
+        $this->strDestinationFile = $strFile;
+        return $this;
     }
 
     /**
@@ -342,6 +379,46 @@ class Minify
     }
 
     /**
+     * Get Public folder
+     *
+     * @return string
+     */
+    public function getPublicFolder()
+    {
+        return $this->strPublicFolderPath;
+    }
+
+    /**
+     * Get destination folder
+     *
+     * @return mixed
+     */
+    public function getDestinationFolder()
+    {
+        return $this->strDestinationFolder;
+    }
+
+    /**
+     * Set destination file
+     *
+     * @return mixed
+     */
+    public function getDestinationFile()
+    {
+        return $this->strDestinationFile;
+    }
+
+    /**
+     * Get application file name
+     *
+     * @return string
+     */
+    public function getAppFileName()
+    {
+        return $this->getFilesFolder() . '/' . $this->getDestinationFile();
+    }
+
+    /**
      * Get destination file type extension
      *
      * @return mixed
@@ -351,107 +428,8 @@ class Minify
         return $this->strDestinationExtension;
     }
 
-    /**
-     * Build file
-     *
-     * @param $arrOriginExtensions
-     * @return string
-     */
-    public function build($arrOriginExtensions)
+    public function getFilesFolder()
     {
-        $strPublicFolder = $this->strPublicFolderPath . '/' . $this->getDestinationFolder();
-
-        // abort if folder not found
-        if (!is_dir($strPublicFolder)) {
-            return $strPublicFolder . ' folder not found';
-        }
-
-        // get all files
-        $arrFiles = scandir($strPublicFolder);
-
-        // loop through all files
-        $strMinifiedFileContents = '';
-        foreach ($arrFiles as $strFileName) {
-            // get file extension
-            $arrFileName = explode('.', $strFileName);
-            $strFileExtension = array_pop($arrFileName);
-
-            // must be a listed file type
-            if (!in_array($strFileExtension, $arrOriginExtensions)) {
-                continue;
-            }
-
-            // must not be the app file
-            if ($strFileName == $this->getDestinationFile()) {
-                continue;
-            }
-
-            // add new minified file to concatenated version
-            $strMinifiedFileContents .=
-                "\n/* $strFileName */\n" .
-                $this->getMinifiedContent($strPublicFolder . '/' . $strFileName)
-            ;
-        }
-
-        // returned concatenated version of minifired files
-        return $strMinifiedFileContents;
-    }
-
-    /**
-     * Get minified Content
-     *
-     * @param $strFile
-     * @return bool|string
-     */
-    public function getMinifiedContent($strFile)
-    {
-        // if it's minified already return content
-        if (preg_match('/\.min\./', $strFile)) {
-            return file_get_contents($strFile);
-        }
-
-        // return minified content
-        return $this->minifyContent($strFile);
-    }
-
-    /**
-     * Minify content
-     *
-     * @param  $strFile
-     * @return bool|string
-     */
-    public function minifyContent($strFile)
-    {
-        // minify based on file type
-        switch ($this->getDestinationExtension()) {
-            case 'js':
-                return $this->minifyJs($strFile);
-            case 'css':
-                return $this->minifyCss($strFile);
-            default:
-                return '';
-        }
-    }
-
-    /**
-     * Minify JS
-     *
-     * @param $strFile
-     * @return bool|string
-     */
-    public function minifyJs($strFile)
-    {
-        return (new Minifier\JS($strFile))->minify();
-    }
-
-    /**
-     * Minify CSS
-     *
-     * @param $strFile
-     * @return bool|string
-     */
-    public function minifyCss($strFile)
-    {
-        return (new Minifier\CSS($strFile))->minify();
+        return $this->getPublicFolder() . '/' . $this->getDestinationFolder();
     }
 }
