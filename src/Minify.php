@@ -206,22 +206,21 @@ class Minify
      * Get minified Content
      *
      * @param $strFileName
-     * @return bool|string
+     * @return null|string
      */
     public function getMinifiedContent($strFileName)
     {
         // get file extension
-        $arrFileName = explode('.', $strFileName);
-        $strFileExtension = array_pop($arrFileName);
+        $strFileExtension = array_pop(explode('.', $strFileName));
 
-        // must be a listed file type
-        if (!in_array($strFileExtension, $this->arrFileTypes[$this->getDestinationExtension()])) {
-            return '';
+        // must be an accepted file type
+        if (!$this->isAcceptedExtension($strFileExtension)) {
+            return null;
         }
 
         // must not be the app file
         if ($strFileName == $this->getDestinationFile()) {
-            return '';
+            return null;
         }
 
         // build file path and name
@@ -234,6 +233,17 @@ class Minify
 
         // return minified content
         return $this->minifyContent($strFile);
+    }
+
+    /**
+     * Determine if it's an accepted extension
+     *
+     * @param $strFileExtension
+     * @return bool
+     */
+    public function isAcceptedExtension($strFileExtension)
+    {
+        return in_array($strFileExtension, $this->arrFileTypes[$this->getDestinationExtension()]);
     }
 
     /**
