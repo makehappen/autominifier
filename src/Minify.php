@@ -6,10 +6,17 @@ use MatthiasMullie\Minify as Minifier;
 
 /**
  * Class Minify
+ *
+ * Automatically Minify and Concatenate your JS and CSS files and libraries into single files
+ * for improved application performance.
+ *
  * @package Makehappen\AutoMinifier
  */
 class Minify
 {
+    /**
+     * @var Environment
+     */
     protected $objEnvironment;
 
     /**
@@ -428,6 +435,11 @@ class Minify
         return $this->strDestinationExtension;
     }
 
+    /**
+     * Get files folder
+     *
+     * @return string
+     */
     public function getFilesFolder()
     {
         return $this->getPublicFolder() . '/' . $this->getDestinationFolder();
