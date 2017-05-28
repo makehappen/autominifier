@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="AutoMinifier Test Suite" tests="1" assertions="10" failures="0" errors="0" time="0.011019">
-    <testsuite name="Makehappen\AutoMinifier\MinifyTest" file="/Users/florin/dev/makehappen/packages/makehappen/autominifier/tests/MinifyTest.php" tests="1" assertions="10" failures="0" errors="0" time="0.011019">
-      <testcase name="testFilesCanBeCreated" class="Makehappen\AutoMinifier\MinifyTest" file="/Users/florin/dev/makehappen/packages/makehappen/autominifier/tests/MinifyTest.php" line="11" assertions="10" time="0.011019"/>
+  <testsuite name="AutoMinifier Test Suite" tests="1" assertions="10" failures="0" errors="0" time="0.007815">
+    <testsuite name="Makehappen\AutoMinifier\MinifyTest" file="/Users/florin/dev/makehappen/packages/makehappen/autominifier/tests/MinifyTest.php" tests="1" assertions="10" failures="0" errors="0" time="0.007815">
+      <testcase name="testFilesCanBeCreated" class="Makehappen\AutoMinifier\MinifyTest" file="/Users/florin/dev/makehappen/packages/makehappen/autominifier/tests/MinifyTest.php" line="11" assertions="10" time="0.007815"/>
     </testsuite>
   </testsuite>
 </testsuites>
