@@ -211,8 +211,7 @@ class Minify
     public function getMinifiedContent($strFileName)
     {
         // get file extension
-        $arrFileName = explode('.', $strFileName);
-        $strFileExtension = array_pop($arrFileName);
+        $strFileExtension = array_pop(explode('.', $strFileName));
 
         // must be an accepted file type
         if (!$this->isAcceptedExtension($strFileExtension)) {
