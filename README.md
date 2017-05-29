@@ -41,12 +41,26 @@ $ composer require makehappen/autominifier
 // minifier instance with default settings
 $minifier = new Makehappen\AutoMinifier\Minify();
 
-// returns "/js/app.min.js?dh39skw83jdu38wodjr783jrysj38iee"
+// returns "/js/app.min.js"
 $minifier->js();
 
-// returns "/css/app.min.css?dh39skw83jdu38wodjr783jrysj38iee"
+// returns "/css/app.min.css"
 $minifier->css();
 ```
+
+Post install:
+
+- Add env.json files to .gitignore
+
+- Update environment in env.json to development
+```
+{
+    "environment": "development"
+}
+```
+
+- Run minifier instance again to generate .min files
+
 
 ## Customized Usage
 ``` php
@@ -60,19 +74,21 @@ $minifier->js('/javascript', 'functions.min.js');
 // returns .min.css file path path with custom destinations
 $minifier->js('/styles', 'style.min.css');
 
+// For a customized list and order of files update config.json
+{
+    "files": [
+        "file-1.js",
+        "folder2/file-2.js'
+    ]
+}
 ```
 
 ## Conventions
  - By default, JavaScript files should live in the public /js folder or its sub-folders
  - By default, CSS files should live in the public /css folder or its sub-folders
- - The relative path from vendor folder to public folder should be ../public
+ - Default concatenation order is alphabetical, folders first, followed by file names
+ - Default relative path from vendor folder to public folder is expected to be ../public
  - Accepted extension files: .js, .css, .sass, .scss
- - Already minified files should have .min before their extensions
- - Only files intended to be included in the "app.min." files should live in these folders
- - Concatenation order is alphabetical, folders first, followed by file names
- - Development environments should end with ".dev" or be "localhost"
- - The package will use or create a "storage" folder located one level up from /vendor
-
 
 ## Change log
 

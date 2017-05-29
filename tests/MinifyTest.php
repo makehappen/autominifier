@@ -45,7 +45,9 @@ final class MinifyTest extends TestCase
 
             // clean up test files
             unlink($objAutoMinifier->getPublicFolder() .  $arrFileDetails[0]);
-            unlink($objAutoMinifier->getPublicFolder() . '/' . $strType .  '/autominifier-cache-bust.txt');
+            unlink($objAutoMinifier->getPublicFolder() . '/' . $strType .  '/' . Environment::SIGNATURE_FILE);
+            unlink($objAutoMinifier->getPublicFolder() . '/' . $strType .  '/' . Environment::ENV_FILE);
+            unlink($objAutoMinifier->getPublicFolder() . '/' . $strType .  '/' . Environment::CONFIG_FILE);
 
             // remove test directory
             rmdir("build/$strType");

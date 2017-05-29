@@ -20,6 +20,11 @@ class Minify
     protected $objEnvironment;
 
     /**
+     * @var
+     */
+    protected $objConfig;
+
+    /**
      * Cache bust file path
      *
      * @var string
@@ -140,6 +145,7 @@ class Minify
         $this->setDestinationFolder($strFolder);
         $this->setDestinationFile($strFile);
         $this->setCacheBustFile();
+        $this->loadConfig();
         return $strFolder . '/' . $strFile .'?' . $this->process();
     }
 
@@ -172,20 +178,9 @@ class Minify
      */
     public function build()
     {
-        // files folder
-        $strFilesFolder = $this->getFilesFolder();
-
-        // abort if folder not found
-        if (!is_dir($strFilesFolder)) {
-            return $strFilesFolder . ' folder not found';
-        }
-
-        // get all files
-        $arrFiles = scandir($strFilesFolder);
-
         // loop through all files
         $strMinifiedFileContents = '';
-        foreach ($arrFiles as $strFileName) {
+        foreach ($this->getFiles() as $strFileName) {
             // get minified content
             $strFileContents = $this->getMinifiedContent($strFileName);
 
@@ -200,6 +195,22 @@ class Minify
 
         // returned concatenated version of minifired files
         return $strMinifiedFileContents;
+    }
+
+    public function getFiles()
+    {
+        // if list of files found in config, return them
+        if (count($this->objConfig->files)) {
+            return $this->objConfig->files;
+        }
+
+        // abort if folder not found
+        if (!is_dir($this->getFilesFolder())) {
+            return [];
+        }
+
+        // get all files
+        return scandir($this->getFilesFolder());
     }
 
     /**
@@ -310,15 +321,31 @@ class Minify
         return $this;
     }
 
+    public function loadConfig()
+    {
+        // default config
+        $arrDefaultConfig = [
+            'files' => []
+        ];
+
+        // set config
+        $this->objConfig = $this->objEnvironment->getSettings(
+            $this->getFilesFolder() . '/' . Environment::CONFIG_FILE,
+            $arrDefaultConfig
+        );
+
+        // set environment
+        $this->objEnvironment->setEnvironment($this->getFilesFolder());
+    }
+
     /**
      * Set Cache bust file
      *
-     * @param string $strFile
      * @return $this
      */
-    public function setCacheBustFile($strFile = 'autominifier-cache-bust.txt')
+    public function setCacheBustFile()
     {
-        $this->strCacheBustFile = $this->getFilesFolder() . "/$strFile";
+        $this->strCacheBustFile = $this->getFilesFolder() . '/' . Environment::SIGNATURE_FILE;
         return $this;
     }
 
