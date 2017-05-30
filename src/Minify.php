@@ -1,6 +1,6 @@
 <?php
 
-namespace Makehappen\AutoMinifier;
+namespace makehappen\autominifier;
 
 use MatthiasMullie\Minify as Minifier;
 
@@ -137,7 +137,7 @@ class Minify
     {
         return $this->getMinifiedFile($strType = 'css', $strFolder, $strFile);
     }
-    
+
     /**
      * Generate minified file
      *

@@ -1,5 +1,5 @@
 <?php
-namespace Makehappen\AutoMinifier;
+namespace makehappen\autominifier;
 
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,6 @@ final class MinifyTest extends TestCase
         require_once __DIR__ . '/../src/Minify.php';
         require_once __DIR__ . '/../src/Environment.php';
         require_once __DIR__ . '/../src/Files.php';
-        require_once __DIR__ . '/../vendor/autoload.php';
 
         // Instantiate auto minifier
         $objAutoMinifier = (new Minify())->setDev()->setTest();

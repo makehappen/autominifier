@@ -1,6 +1,6 @@
 <?php
 
-namespace Makehappen\AutoMinifier;
+namespace makehappen\autominifier;
 
 /**
  * Class Environment
