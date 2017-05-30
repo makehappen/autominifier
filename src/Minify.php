@@ -211,10 +211,12 @@ class Minify
      */
     public function getFiles()
     {
+        // if set in config file, return them
         if (count($this->objConfig->files)) {
             return $this->objConfig->files;
         }
 
+        // find files in folder
         return $this->objFiles->getFiles($this->getFilesFolder());
     }
 
