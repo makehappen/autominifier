@@ -197,6 +197,11 @@ class Minify
         return $strMinifiedFileContents;
     }
 
+    /**
+     * Get files to minify and concatenate
+     *
+     * @return array
+     */
     public function getFiles()
     {
         // if list of files found in config, return them
@@ -221,17 +226,8 @@ class Minify
      */
     public function getMinifiedContent($strFileName)
     {
-        // get file extension
-        $arrFileName = explode('.', $strFileName);
-        $strFileExtension = array_pop($arrFileName);
-
-        // must be a listed file type
-        if (!in_array($strFileExtension, $this->arrFileTypes[$this->getDestinationExtension()])) {
-            return '';
-        }
-
-        // must not be the app file
-        if ($strFileName == $this->getDestinationFile()) {
+        // make sure the file name it's valid
+        if (!$this->isValidFileName($strFileName)) {
             return '';
         }
 
@@ -245,6 +241,31 @@ class Minify
 
         // return minified content
         return $this->minifyContent($strFile);
+    }
+
+    /**
+     * Determine if it's a valid file name
+     *
+     * @param $strFileName
+     * @return bool
+     */
+    public function isValidFileName($strFileName)
+    {
+        // get file extension
+        $arrFileName = explode('.', $strFileName);
+        $strFileExtension = array_pop($arrFileName);
+
+        // must be a listed file type
+        if (!in_array($strFileExtension, $this->arrFileTypes[$this->getDestinationExtension()])) {
+            return false;
+        }
+
+        // must not be the app file
+        if ($strFileName == $this->getDestinationFile()) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -321,6 +342,9 @@ class Minify
         return $this;
     }
 
+    /**
+     * Load configuration
+     */
     public function loadConfig()
     {
         // default config

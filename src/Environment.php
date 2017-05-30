@@ -2,18 +2,42 @@
 
 namespace Makehappen\AutoMinifier;
 
+/**
+ * Class Environment
+ * @package Makehappen\AutoMinifier
+ */
 class Environment
 {
+    /**
+     * Environment file
+     */
     const ENV_FILE = 'env.json';
 
+    /**
+     * Configuration file
+     */
     const CONFIG_FILE = 'config.json';
 
+    /**
+     * Signature file for cache bust
+     */
     const SIGNATURE_FILE = 'signature.txt';
 
+    /**
+     * Is Development
+     * @var
+     */
     protected $blnIsDev;
 
-    protected $objEnv;
+    /**
+     * Environment Settings
+     * @var
+     */
+    protected $objEnvironmentSettings;
 
+    /**
+     * Environment constructor.
+     */
     public function __construct()
     {
     }
@@ -50,17 +74,29 @@ class Environment
         return false;
     }
 
+    /**
+     * Determine if it has develompent env set
+     *
+     * @return bool
+     */
     public function hasDevEnv()
     {
         // if not set abort
-        if (empty($this->objEnv->environment)) {
+        if (empty($this->objEnvironmentSettings->environment)) {
             return false;
         }
 
         // determine if it's development
-        return 'development' == $this->objEnv->environment;
+        return 'development' == $this->objEnvironmentSettings->environment;
     }
 
+    /**
+     * Create a settings file
+     *
+     * @param $strFilePath
+     * @param $arrSettings
+     * @return object
+     */
     public function createSettingsFile($strFilePath, $arrSettings)
     {
         // create file
@@ -69,6 +105,13 @@ class Environment
         return (object) $arrSettings;
     }
 
+    /**
+     * Get settings
+     *
+     * @param null $strFile
+     * @param array $arrSettings
+     * @return mixed|object
+     */
     public function getSettings($strFile = null, $arrSettings = [])
     {
         // crete and retur if does not exists
@@ -80,6 +123,11 @@ class Environment
         return json_decode(file_get_contents($strFile));
     }
 
+    /**
+     * Set environment
+     *
+     * @param null $strFilesFolder
+     */
     public function setEnvironment($strFilesFolder = null)
     {
         // default environment
@@ -88,6 +136,6 @@ class Environment
         ];
 
         // get env file settings
-        $this->objEnv = $this->getSettings($strFilesFolder  . '/' . self::ENV_FILE, $arrDefaultEnv);
+        $this->objEnvironmentSettings = $this->getSettings($strFilesFolder  . '/' . self::ENV_FILE, $arrDefaultEnv);
     }
 }
