@@ -7,9 +7,10 @@ class Files
     /**
      * Get files to minify and concatenate
      *
+     * @var $strFilesFolder
      * @return array
      */
-    public function getFiles($strFilesFolder)
+    public function getFiles($strFilesFolder = '')
     {
         // abort if folder not found
         if (!is_dir($strFilesFolder)) {

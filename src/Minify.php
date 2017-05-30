@@ -188,15 +188,8 @@ class Minify
         // min file contents
         $strMinifiedFileContents = '';
 
-        // get files
-        $arrFiles =
-            (count($this->objConfig->files)) ?
-                $this->objConfig->files
-                : $this->objFiles->getFiles($this->getFilesFolder())
-        ;
-
         // loop through all files
-        foreach ($arrFiles as $strFileName) {
+        foreach ($this->getFiles() as $strFileName) {
             // get minified content
             $strFileContents = $this->getMinifiedContent($strFileName);
 
@@ -211,6 +204,18 @@ class Minify
 
         // returned concatenated version of minifired files
         return $strMinifiedFileContents;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFiles()
+    {
+        if (count($this->objConfig->files)) {
+            return $this->objConfig->files;
+        }
+
+        return $this->objFiles->getFiles($this->getFilesFolder());
     }
 
     /**
