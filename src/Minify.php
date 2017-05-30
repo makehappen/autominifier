@@ -25,6 +25,11 @@ class Minify
     protected $objConfig;
 
     /**
+     * @var Files
+     */
+    protected $objFiles;
+
+    /**
      * Cache bust file path
      *
      * @var string
@@ -85,8 +90,10 @@ class Minify
 
         // set environment
         $this->objEnvironment = new Environment();
-    }
 
+        // set files class
+        $this->objFiles = new Files();
+    }
 
     /**
      * Set Class Variables
@@ -158,7 +165,7 @@ class Minify
     {
         // return last cache bust in non development environments
         if (!$this->objEnvironment->isDevEnv()) {
-            return $this->getCacheBust();
+            return $this->objFiles->getCacheBust($this->strCacheBustFile);
         }
 
         // build application file
@@ -168,7 +175,7 @@ class Minify
         file_put_contents($this->getAppFileName(), $strApplicationFileContents);
 
         // save new cache bust
-        return $this->saveCacheBust($strApplicationFileContents);
+        return $this->objFiles->saveCacheBust($strApplicationFileContents, $this->strCacheBustFile);
     }
 
     /**
@@ -178,9 +185,18 @@ class Minify
      */
     public function build()
     {
-        // loop through all files
+        // min file contents
         $strMinifiedFileContents = '';
-        foreach ($this->getFiles() as $strFileName) {
+
+        // get files
+        $arrFiles =
+            (count($this->objConfig->files)) ?
+                $this->objConfig->files
+                : $this->objFiles->getFiles($this->getFilesFolder())
+        ;
+
+        // loop through all files
+        foreach ($arrFiles as $strFileName) {
             // get minified content
             $strFileContents = $this->getMinifiedContent($strFileName);
 
@@ -195,27 +211,6 @@ class Minify
 
         // returned concatenated version of minifired files
         return $strMinifiedFileContents;
-    }
-
-    /**
-     * Get files to minify and concatenate
-     *
-     * @return array
-     */
-    public function getFiles()
-    {
-        // if list of files found in config, return them
-        if (count($this->objConfig->files)) {
-            return $this->objConfig->files;
-        }
-
-        // abort if folder not found
-        if (!is_dir($this->getFilesFolder())) {
-            return [];
-        }
-
-        // get all files
-        return scandir($this->getFilesFolder());
     }
 
     /**
@@ -288,45 +283,15 @@ class Minify
     }
 
     /**
-     * Save Cache Bust
-     *
-     * @var string $strApplicationFileContents
-     * @return null
+     * Load configuration
      */
-    public function saveCacheBust($strApplicationFileContents = '')
+    public function loadConfig()
     {
-        // get contents signature
-        $strNewCacheBust = md5($strApplicationFileContents);
+        // set config
+        $this->objConfig = $this->objEnvironment->getConfig($this->getFilesFolder());
 
-        // get prior cache bust
-        $strPriorCacheBust = $this->getCacheBust();
-
-        // if unchanged, stop here
-        if ($strPriorCacheBust == $strNewCacheBust) {
-            return $strPriorCacheBust;
-        }
-
-        // set new cache bust
-        file_put_contents($this->strCacheBustFile, $strNewCacheBust);
-
-        // return new cache bust
-        return $strNewCacheBust;
-    }
-
-    /**
-     * Get Cache Bust
-     *
-     * @return bool|string
-     */
-    public function getCacheBust()
-    {
-        // abort if file not found
-        if (!file_exists($this->strCacheBustFile)) {
-            return '';
-        }
-
-        // get cache bust file contents
-        return file_get_contents($this->strCacheBustFile);
+        // set environment
+        $this->objEnvironment->setEnvironment($this->getFilesFolder());
     }
 
     /**
@@ -340,26 +305,6 @@ class Minify
         $this->objEnvironment->setDev($bln);
         $this->blnIsDev = $bln;
         return $this;
-    }
-
-    /**
-     * Load configuration
-     */
-    public function loadConfig()
-    {
-        // default config
-        $arrDefaultConfig = [
-            'files' => []
-        ];
-
-        // set config
-        $this->objConfig = $this->objEnvironment->getSettings(
-            $this->getFilesFolder() . '/' . Environment::CONFIG_FILE,
-            $arrDefaultConfig
-        );
-
-        // set environment
-        $this->objEnvironment->setEnvironment($this->getFilesFolder());
     }
 
     /**
@@ -426,14 +371,17 @@ class Minify
         return $this;
     }
 
+
     /**
      * Set destination file extension
      *
      * @param $strDestinationExtension
+     * @return $this
      */
     public function setDestinationExtensionType($strDestinationExtension)
     {
         $this->strDestinationExtension = $strDestinationExtension;
+        return $this;
     }
 
     /**

@@ -124,6 +124,23 @@ class Environment
     }
 
     /**
+     * Get Config
+     *
+     * @param $strFilesFolder
+     * @return mixed|object
+     */
+    public function getConfig($strFilesFolder)
+    {
+        // default config
+        $arrDefaultConfig = [
+            'files' => []
+        ];
+
+        // return config
+        return $this->getSettings($strFilesFolder . '/' . Environment::CONFIG_FILE, $arrDefaultConfig);
+    }
+
+    /**
      * Set environment
      *
      * @param null $strFilesFolder
