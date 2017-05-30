@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-  <testsuite name="AutoMinifier Test Suite" tests="1" assertions="10" failures="0" errors="0" time="0.003958">
-    <testsuite name="makehappen\autominifier\MinifyTest" file="/Users/florin/GIT/packages/autominifier/tests/MinifyTest.php" tests="1" assertions="10" failures="0" errors="0" time="0.003958">
-      <testcase name="testFilesCanBeCreated" class="makehappen\autominifier\MinifyTest" file="/Users/florin/GIT/packages/autominifier/tests/MinifyTest.php" line="11" assertions="10" time="0.003958"/>
+  <testsuite name="AutoMinifier Test Suite" tests="1" assertions="10" failures="0" errors="0" time="0.005297">
+    <testsuite name="makehappen\autominifier\MinifyTest" file="/Users/florin/GIT/packages/autominifier/tests/MinifyTest.php" tests="1" assertions="10" failures="0" errors="0" time="0.005297">
+      <testcase name="testFilesCanBeCreated" class="makehappen\autominifier\MinifyTest" file="/Users/florin/GIT/packages/autominifier/tests/MinifyTest.php" line="11" assertions="10" time="0.005297"/>
     </testsuite>
   </testsuite>
 </testsuites>
