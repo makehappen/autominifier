@@ -53,7 +53,7 @@ Post install:
 - Add env.json files to .gitignore
 
 - Update environment in env.json to development
-```
+``` json
 {
     "environment": "development"
 }
@@ -63,6 +63,8 @@ Post install:
 
 
 ## Customized Usage
+
+Custom folders and .min files: 
 ``` php
 // minifier instance with public path relative to package src folder path
 $minifier = new Makehappen\AutoMinifier\Minify();
@@ -73,12 +75,14 @@ $minifier->js('/javascript', 'functions.min.js');
 
 // returns .min.css file path path with custom destinations
 $minifier->js('/styles', 'style.min.css');
+```
 
-// For a customized list and order of files update config.json
+Custom list and order of files: config.json
+```json
 {
     "files": [
         "file-1.js",
-        "folder2/file-2.js'
+        "folder2/file-2.js"
     ]
 }
 ```
