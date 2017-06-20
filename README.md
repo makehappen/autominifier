@@ -88,6 +88,7 @@ Custom list and order of files: config.json
 ```
 ## Implementation example in a Laravel project
 [![Autominifier implementation example in a Laravel project](https://user-images.githubusercontent.com/3846431/27359704-261c8d24-55d2-11e7-88dc-00520ed71bf4.png)](https://github.com/makehappen/autominifier/issues/1) 
+###[View all Screenshots &gt;&gt;](https://github.com/makehappen/autominifier/issues/1) 
 
 ## Conventions
  - By default, JavaScript files should live in the public /js folder or its sub-folders
